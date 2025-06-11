@@ -20,6 +20,7 @@ export default function plugin(engine, config = {}) {
     stats = new StatsMonitor(),
     _display = stats.display,
     display = (show = true) => {
+      console.log("display", show)
       config.hidden = !show
       _display(show)
       stats.resetPanel()
@@ -63,7 +64,7 @@ export default function plugin(engine, config = {}) {
     stats.end()
   })
 
-  stats.display = _display
+  stats.display = display
 
   return {
     FPS_METER: stats,
