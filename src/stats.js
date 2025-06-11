@@ -1,13 +1,16 @@
 /**
  * Based on https://github.com/mrdoob/stats.js/blob/master/src/Stats.js
  */
-export default function Stats() {
+export default function StatsMonitor() {
   let mode = 0,
     showing = true
 
-  const container = document.createElement("div")
+  const container = document.createElement("div"),
+    panels = [],
+    now = () => (performance || Date).now()
+
   container.style.cssText =
-    "position:absolute;top:0;right:0;cursor:pointer;opacity:0.9;z-index:10000"
+    "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000"
   container.addEventListener(
     "click",
     function (event) {
@@ -18,7 +21,9 @@ export default function Stats() {
   )
 
   function addPanel(name, bg, fg, style) {
-    return new Panel(name, bg, fg, container, style)
+    const p = new Panel(name, bg, fg, container, style)
+    panels.push(p)
+    return p
   }
 
   function showPanel(id) {
@@ -36,12 +41,27 @@ export default function Stats() {
     showPanel(mode)
   }
 
+  /**
+   * @param {string|number} id
+   */
+  function resetPanel(id = "all") {
+    if ("all" === id) {
+      for (let i = 0; i < panels.length; i++) {
+        panels[i].reset()
+      }
+    } else if (panels[id]) {
+      panels[id].reset()
+    }
+    prevTime = now()
+    frames = 0
+  }
+
   function display(show = true) {
     showing = !!show
     container.style.display = showing ? "" : "none"
   }
 
-  let beginTime = (performance || Date).now(),
+  let beginTime = now(),
     prevTime = beginTime,
     frames = 0
 
@@ -61,6 +81,7 @@ export default function Stats() {
     addPanel,
     showPanel,
     nextPanel,
+    resetPanel,
     display,
 
     get hidden() {
@@ -68,13 +89,13 @@ export default function Stats() {
     },
 
     begin: function () {
-      beginTime = (performance || Date).now()
+      beginTime = now()
     },
 
     end: function () {
       frames++
 
-      const time = (performance || Date).now()
+      const time = now()
 
       msPanel.update(time - beginTime, 200)
 
@@ -132,20 +153,26 @@ function Panel(name, fg, bg, wrapper, style = {}) {
   context.font = "bold " + 9 * PR + "px Helvetica,Arial,sans-serif"
   context.textBaseline = "top"
 
-  context.fillStyle = bg
-  context.fillRect(0, 0, WIDTH, HEIGHT)
+  function reset() {
+    context.fillStyle = bg
+    context.fillRect(0, 0, WIDTH, HEIGHT)
 
-  context.fillStyle = fg
-  context.fillText(name, TEXT_X, TEXT_Y)
-  context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT)
+    context.fillStyle = fg
+    context.fillText(name, TEXT_X, TEXT_Y)
+    context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT)
 
-  context.fillStyle = bg
-  context.globalAlpha = 0.9
-  context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT)
+    context.fillStyle = bg
+    context.globalAlpha = 0.9
+    context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT)
+  }
+
+  reset()
 
   return {
     id,
     dom: canvas,
+
+    reset,
 
     update: function (value, maxValue) {
       min = Math.min(min, value)
@@ -154,8 +181,8 @@ function Panel(name, fg, bg, wrapper, style = {}) {
       context.fillStyle = bg
       context.globalAlpha = 1
       context.fillRect(0, 0, WIDTH, GRAPH_Y)
-      context.fillStyle = fg
 
+      context.fillStyle = fg
       const label = [round(value), name]
       if (style.labelBefore) {
         label.reverse()

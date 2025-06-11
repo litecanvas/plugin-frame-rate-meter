@@ -1,5 +1,5 @@
 import "litecanvas"
-import Stats from "./stats.js"
+import StatsMonitor from "./stats.js"
 
 const defaults = {
   hotkeyShow: "F1",
@@ -16,7 +16,14 @@ const defaults = {
 export default function plugin(engine, config = {}) {
   config = Object.assign({}, defaults, config)
 
-  const stats = new Stats()
+  const settings = engine.stat(0),
+    stats = new StatsMonitor(),
+    _display = stats.display,
+    display = (show = true) => {
+      config.hidden = !show
+      _display(show)
+      stats.resetPanel()
+    }
 
   if (config.id) {
     stats.dom.id = config.id
@@ -28,26 +35,35 @@ export default function plugin(engine, config = {}) {
 
   engine.CANVAS.parentElement.appendChild(stats.dom)
 
-  stats.display(!config.hidden)
+  display(!config.hidden)
 
-  listen("update", () => {
-    if (config.hotkeyShow && engine.iskeypressed(config.hotkeyShow)) {
-      config.hidden = !config.hidden
-      stats.display(!config.hidden)
-    }
+  if (settings.keyboardEvents) {
+    listen("update", () => {
+      if (config.hotkeyShow && engine.iskeypressed(config.hotkeyShow)) {
+        display(config.hidden)
+      }
 
-    if (config.hotkeyNext && engine.iskeypressed(config.hotkeyNext)) {
-      stats.nextPanel()
-    }
-  })
+      if (config.hotkeyNext && engine.iskeypressed(config.hotkeyNext)) {
+        stats.nextPanel()
+      }
+    })
+  }
 
   listen("before:update", (_, i = 1) => {
-    if (!config.hidden && i === 1) stats.begin()
+    if (config.hidden) {
+      return
+    }
+    if (i === 1) stats.begin()
   })
 
   listen("after:draw", () => {
-    if (!config.hidden) stats.end()
+    if (config.hidden) {
+      return
+    }
+    stats.end()
   })
+
+  stats.display = _display
 
   return {
     FPS_METER: stats,
