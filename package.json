@@ -1,6 +1,6 @@
 {
   "name": "@litecanvas/plugin-frame-rate-meter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Plugin to create a performance monitor to measure frame rate of litecanvas games",
   "author": "Luiz Bills <luizbills@pm.me>",
   "license": "MIT",

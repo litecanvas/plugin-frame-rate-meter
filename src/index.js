@@ -37,7 +37,6 @@ export default function plugin(engine, config = {}) {
     }
 
     if (config.hotkeyNext && engine.iskeypressed(config.hotkeyNext)) {
-      console.log("next")
       stats.nextPanel()
     }
   })

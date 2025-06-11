@@ -23,7 +23,7 @@ use(pluginFrameRateMeter, {
 
   // hotkey to swap the panel
   // you can also tap the monitor to change panels
-  hotkeyShow: "F2",
+  hotkeyNext: "F2",
 
   // if true, the monitor will not be displayed automatically
   hidden: false,
