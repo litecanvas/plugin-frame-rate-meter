@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,
+    user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <title>Litecanvas Plugin</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/litecanvas/dist/dist.js"></script>
+    <script src="../dist/dist.js"></script>
+    <script>
+      let objects = []
+
+      litecanvas()
+
+      use(pluginFrameRateMeter, {
+        hotkey: "F1",
+        css: { border: "1px white solid", opacity: 0.75 },
+        hidden: false,
+        id: "fps-meter",
+      })
+
+      function init() {
+        addObjects()
+      }
+
+      function update(dt) {
+        if (iskeypressed("space")) {
+          addObjects()
+        }
+      }
+
+      function draw() {
+        cls(0)
+
+        for (const obj of objects) {
+          circfill(obj.x, obj.y, obj.r, obj.c)
+        }
+
+        text(10, 10, "Total of objects: " + objects.length, 3, "bold")
+        text(10, 40, "Press SPACE to add objects", 3, "bold")
+        text(10, 70, "Press F1 to toggle the FPS Meter", 3, "bold")
+      }
+
+      function addObjects(n = 250) {
+        for (let i = 0; i < n; i++) {
+          objects.push({
+            x: randi(0, W),
+            y: randi(0, H),
+            r: randi(8, 32),
+            c: randi(4, 11),
+          })
+        }
+      }
+    </script>
+  </body>
+</html>

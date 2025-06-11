@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,
+    user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <title>Litecanvas Plugin</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/litecanvas/dist/dist.js"></script>
+    <script src="../dist/dist.js"></script>
+    <script>
+      let posx = 0,
+        panelFrames
+
+      litecanvas()
+
+      use(pluginFrameRateMeter, {
+        hotkey: "F1",
+        css: { border: "1px white solid", opacity: 0.75 },
+        hidden: false,
+        id: "fps-meter",
+      })
+
+      function init() {
+        panelFrames = FPS_METER.addPanel("POS X", "#ff8", "#221", {
+          width: 120, // default is 80
+          labelBefore: true, // default is false
+        })
+        FPS_METER.showPanel(panelFrames.id)
+        FPS_METER.canvas
+      }
+
+      function update() {
+        posx = wave(CX - 100, CX + 100, T)
+      }
+
+      function draw() {
+        cls(0)
+
+        text(10, 10, "Tap the monitor to change the panel", 3, "bold")
+        circfill(posx, CY, 64, 4)
+
+        // update the custom panel
+        panelFrames.update(posx, CX + 100)
+      }
+    </script>
+  </body>
+</html>
