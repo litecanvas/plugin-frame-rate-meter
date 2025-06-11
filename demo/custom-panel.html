@@ -23,12 +23,7 @@
 
       litecanvas()
 
-      use(pluginFrameRateMeter, {
-        hotkey: "F1",
-        css: { border: "1px white solid", opacity: 0.75 },
-        hidden: false,
-        id: "fps-meter",
-      })
+      use(pluginFrameRateMeter)
 
       function init() {
         panelFrames = FPS_METER.addPanel("POS X", "#ff8", "#221", {
