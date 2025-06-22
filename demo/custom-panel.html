@@ -35,17 +35,17 @@
       }
 
       function update() {
-        posx = wave(CX - 100, CX + 100, T)
+        posx = wave(W / 2 - 100, W / 2 + 100, T)
       }
 
       function draw() {
         cls(0)
 
         text(10, 10, "Tap the monitor to change the panel", 3, "bold")
-        circfill(posx, CY, 64, 4)
+        circfill(posx, H / 2, 64, 4)
 
         // update the custom panel
-        panelFrames.update(posx, CX + 100)
+        panelFrames.update(posx, W / 2 + 100)
       }
     </script>
   </body>

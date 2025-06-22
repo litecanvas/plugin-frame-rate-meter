@@ -33,7 +33,7 @@ export default function plugin(engine, config = {}) {
     stats.dom.style[key] = value
   }
 
-  engine.CANVAS.parentElement.appendChild(stats.dom)
+  engine.canvas().parentElement.appendChild(stats.dom)
 
   display(!config.hidden)
 
