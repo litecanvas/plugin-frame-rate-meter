@@ -63,6 +63,10 @@ export default function plugin(engine, config = {}) {
     stats.end()
   })
 
+  listen("quit", () => {
+    stats.dom.remove()
+  })
+
   stats.display = display
 
   return {
