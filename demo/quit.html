@@ -32,6 +32,8 @@
         cls(0)
         text(10, 10, "Press Q to quit")
       }
+
+      listen("quit", () => canvas().remove())
     </script>
   </body>
 </html>

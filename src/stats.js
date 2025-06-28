@@ -129,10 +129,9 @@ function Panel(name, fg, bg, wrapper, style = {}) {
   let min = Infinity,
     max = 0
 
-  const PR = round(window.devicePixelRatio || 1)
-
-  const WIDTH = (style.width || 80) * PR,
-    HEIGHT = 48 * PR,
+  const PR = round(window.devicePixelRatio || 1),
+    WIDTH = style.width || 80,
+    HEIGHT = 48,
     TEXT_X = 3 * PR,
     TEXT_Y = 2 * PR,
     GRAPH_X = 3 * PR,
@@ -142,20 +141,20 @@ function Panel(name, fg, bg, wrapper, style = {}) {
 
   const canvas = document.createElement("canvas")
 
-  canvas.width = WIDTH
-  canvas.height = HEIGHT
-  // canvas.style.cssText = "width:80px;height:48px"
+  canvas.width = WIDTH * PR
+  canvas.height = HEIGHT * PR
+  canvas.style.cssText = `width:${style.width};height:48px`
 
   const id = wrapper.children.length
   wrapper.appendChild(canvas)
 
   const context = canvas.getContext("2d")
-  context.font = "bold " + 9 * PR + "px Helvetica,Arial,sans-serif"
+  context.font = `bold ${9 * PR}px Helvetica,Arial,sans-serif`
   context.textBaseline = "top"
 
   function reset() {
     context.fillStyle = bg
-    context.fillRect(0, 0, WIDTH, HEIGHT)
+    context.fillRect(0, 0, WIDTH * PR, HEIGHT * PR)
 
     context.fillStyle = fg
     context.fillText(name, TEXT_X, TEXT_Y)
@@ -180,7 +179,7 @@ function Panel(name, fg, bg, wrapper, style = {}) {
 
       context.fillStyle = bg
       context.globalAlpha = 1
-      context.fillRect(0, 0, WIDTH, GRAPH_Y)
+      context.fillRect(0, 0, WIDTH * PR, GRAPH_Y)
 
       context.fillStyle = fg
       const label = [round(value), name]
