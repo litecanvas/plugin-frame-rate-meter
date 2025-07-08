@@ -18,22 +18,24 @@
     <script src="https://unpkg.com/litecanvas/dist/dist.js"></script>
     <script src="../dist/dist.js"></script>
     <script>
-      litecanvas()
+      const e = litecanvas({
+        global: false,
+      })
 
-      use(pluginFrameRateMeter)
+      e.use(pluginFrameRateMeter)
 
       function update(dt) {
-        if (iskeypressed("q")) {
-          quit()
+        if (e.iskeypressed("q")) {
+          e.quit()
         }
       }
 
       function draw() {
-        cls(0)
-        text(10, 10, "Press Q to quit")
+        e.cls(0)
+        e.text(10, 10, "Press Q to quit")
       }
 
-      listen("quit", () => canvas().remove())
+      e.listen("quit", () => e.canvas().remove())
     </script>
   </body>
 </html>

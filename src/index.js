@@ -38,7 +38,7 @@ export default function plugin(engine, config = {}) {
   display(!config.hidden)
 
   if (settings.keyboardEvents) {
-    listen("update", () => {
+    engine.listen("update", () => {
       if (config.hotkeyShow && engine.iskeypressed(config.hotkeyShow)) {
         display(config.hidden)
       }
@@ -49,21 +49,21 @@ export default function plugin(engine, config = {}) {
     })
   }
 
-  listen("before:update", (_, i = 1) => {
+  engine.listen("before:update", (_, i = 1) => {
     if (config.hidden) {
       return
     }
     if (i === 1) stats.begin()
   })
 
-  listen("after:draw", () => {
+  engine.listen("after:draw", () => {
     if (config.hidden) {
       return
     }
     stats.end()
   })
 
-  listen("quit", () => {
+  engine.listen("quit", () => {
     stats.dom.remove()
   })
 
