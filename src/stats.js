@@ -143,7 +143,7 @@ function Panel(name, fg, bg, wrapper, style = {}) {
 
   canvas.width = WIDTH * PR
   canvas.height = HEIGHT * PR
-  canvas.style.cssText = `width:${style.width};height:48px`
+  canvas.style.cssText = `width:${WIDTH}px;height:48px;`
 
   const id = wrapper.children.length
   wrapper.appendChild(canvas)
